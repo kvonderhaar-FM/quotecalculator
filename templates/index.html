@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quote Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="mb-4">Dynamic Quote Calculator</h1>
+
+
+    <!-- Height -->
+<div class="dimension-group">
+  <label for="height">Height (in):</label>
+  <div class="circle-options" id="height-options">
+    <label><input type="radio" name="height" value="36"><span>36"</span></label>
+    <label><input type="radio" name="height" value="42"><span>42"</span></label>
+    <label><input type="radio" name="height" value="48"><span>48"</span></label>
+    <label><input type="radio" name="height" value="60"><span>60"</span></label>
+    <label><input type="radio" name="height" value="72"><span>72"</span></label>
+  </div>
+</div>
+
+    <!-- Width -->
+    <div class="mb-3">
+      <label for="width">Width (in):</label>
+      <div class="circle-options">
+        <label><input type="radio" name="width" value="36"><span>36"</span></label>
+        <label><input type="radio" name="width" value="48"><span>48"</span></label>
+        <label><input type="radio" name="width" value="60"><span>60"</span></label>
+        <label><input type="radio" name="width" value="72"><span>72"</span></label>
+      </div>
+    </div>
+
+    <!-- Depth -->
+<div class="dimension-group">
+  <label for="depth">Depth (in):</label>
+  <div class="circle-options" id="depth-options">
+    <label><input type="radio" name="length" value="24"><span>24"</span></label>
+    <label><input type="radio" name="length" value="30"><span>30"</span></label>
+    <label><input type="radio" name="length" value="36"><span>36"</span></label>
+  </div>
+</div>
+
+    <!-- === HIDDEN SECTIONS BELOW === -->
+
+<div id="config-sections" style="display: none;">
+     <!-- Gauge Selection -->
+<div class="mb-3">
+  <label class="form-label">Metal Gauge</label><br>
+  <div class="circle-options">
+    <label><input type="radio" name="gauge" value="12" checked><span>12</span></label>
+    <label><input type="radio" name="gauge" value="14"><span>14</span></label>
+  </div>
+</div>
+<!-- Door Type -->
+<div class="mb-3">
+  <label class="form-label">Door Type</label><br>
+  <div class="circle-options">
+    <label>
+      <input type="radio" name="doorType" value="solid" checked>
+      <span>Solid</span>
+    </label>
+
+    <label>
+      <input type="radio" name="doorType" value="clear">
+      <span>Clear</span>
+    </label>
+
+    <label>
+      <input type="radio" name="doorType" value="solid-bins">
+      <span style="font-size: 0.65rem;">Solid w/ Bins</span>
+    </label>
+
+    <label>
+      <input type="radio" name="doorType" value="hex">
+      <span>Hex Vent</span>
+    </label>
+
+    <label>
+      <input type="radio" name="doorType" value="diamond">
+      <span>Diamond Vent</span>
+    </label>
+  </div>
+</div>
+
+<!-- Lock Type -->
+<div class="mb-3">
+  <label class="form-label">Lock Type</label><br>
+  <div class="circle-options">
+    <!-- None Option -->
+    <label>
+      <input type="radio" name="lock" value="none" checked />
+      <span>None</span>
+    </label>
+
+    <!-- Lock Images -->
+    <label>
+      <input type="radio" name="lock" value="CompXRegulator" />
+      <img src="images/compx-regulator.png" alt="CompX Regulator" />
+    </label>
+
+    <label>
+      <input type="radio" name="lock" value="Prologic" />
+      <img src="images/prologic.png" alt="Prologic" />
+    </label>
+
+    <label>
+      <input type="radio" name="lock" value="SafeLogic" />
+      <img src="images/safelogicbasic.png" alt="SafeLogic" />
+    </label>
+
+    <label>
+      <input type="radio" name="lock" value="ScanLogic" />
+      <img src="images/ScanLogicSmart.png" alt="ScanLogic" />
+    </label>
+
+    <label>
+      <input type="radio" name="lock" value="Lockey" />
+      <img src="images/Lockey.png" alt="Lockey" />
+    </label>
+  </div>
+</div>
+
+<!-- Color -->
+<div class="mb-3">
+  <label class="form-label">Color</label><br>
+  <div class="circle-options">
+    <label class="color-option" style="background-color:#808080;">
+      <input type="radio" name="color" value="Standard" checked><span>Grey</span>
+    </label>
+    <label class="color-option" style="background-color:#d9534f;">
+      <input type="radio" name="color" value="Red"><span>Red</span>
+    </label>
+    <label class="color-option" style="background-color:#0275d8;">
+      <input type="radio" name="color" value="Blue"><span>Blue</span>
+    </label>
+    <label class="color-option" style="background-color:#000000;">
+      <input type="radio" name="color" value="Black"><span>Black</span>
+    </label>
+    <label class="color-option" style="background-color:#D2B48C;">
+      <input type="radio" name="color" value="Tan"><span>Tan</span>
+    </label>
+    <label class="color-option" style="background-color:#FFD700;">
+      <input type="radio" name="color" value="Yellow"><span>Yellow</span>
+    </label>
+    <label class="color-option" style="background-color:#FFA500;">
+      <input type="radio" name="color" value="Orange"><span>Orange</span>
+    </label>
+    <label class="color-option" style="background-color:#A9A9A9;">
+      <input type="radio" name="color" value="DarkGrey"><span>Dark Grey</span>
+    </label>
+    <label class="color-option" style="background-color:#008080;">
+      <input type="radio" name="color" value="Teal"><span>Teal</span>
+    </label>
+    <label class="color-option" style="background-color:#8B4513;">
+      <input type="radio" name="color" value="Brown"><span>Brown</span>
+    </label>
+    <label class="color-option" style="background-color:#FFFFFF;">
+      <input type="radio" name="color" value="White"><span>White</span>
+    </label>
+  </div>
+</div>
+
+<!--Shelves-->
+<!-- Quantity of Standard Shelves -->
+<div id="standard-shelf-qty" class="mb-4">
+  <label class="form-label"><strong>Quantity of Standard Shelves</strong></label>
+  <div class="circle-options flex-wrap gap-2">
+    <label><input type="radio" name="standardShelfQty" value="0" checked><span>0</span></label>
+    <label><input type="radio" name="standardShelfQty" value="1"><span>1</span></label>
+    <label><input type="radio" name="standardShelfQty" value="2"><span>2</span></label>
+    <label><input type="radio" name="standardShelfQty" value="3"><span>3</span></label>
+    <label><input type="radio" name="standardShelfQty" value="4"><span>4</span></label>
+    <label><input type="radio" name="standardShelfQty" value="5"><span>5</span></label>
+    <label><input type="radio" name="standardShelfQty" value="6"><span>6</span></label>
+    <label><input type="radio" name="standardShelfQty" value="7"><span>7</span></label>
+    <label><input type="radio" name="standardShelfQty" value="8"><span>8</span></label>
+    <label><input type="radio" name="standardShelfQty" value="9"><span>9</span></label>
+    <label><input type="radio" name="standardShelfQty" value="10"><span>10</span></label>
+  </div>
+</div>
+
+<!-- Quantity of Slide-Out Shelves -->
+<div id="slideout-shelf-qty" class="mb-4">
+  <label class="form-label"><strong>Quantity of Slide-Out Shelves</strong></label>
+  <div class="circle-options flex-wrap gap-2">
+    <label><input type="radio" name="slideoutShelfQty" value="0" checked><span>0</span></label>
+    <label><input type="radio" name="slideoutShelfQty" value="1"><span>1</span></label>
+    <label><input type="radio" name="slideoutShelfQty" value="2"><span>2</span></label>
+    <label><input type="radio" name="slideoutShelfQty" value="3"><span>3</span></label>
+    <label><input type="radio" name="slideoutShelfQty" value="4"><span>4</span></label>
+    <label><input type="radio" name="slideoutShelfQty" value="5"><span>5</span></label>
+    <label><input type="radio" name="slideoutShelfQty" value="6"><span>6</span></label>
+    <label><input type="radio" name="slideoutShelfQty" value="7"><span>7</span></label>
+    <label><input type="radio" name="slideoutShelfQty" value="8"><span>8</span></label>
+    <label><input type="radio" name="slideoutShelfQty" value="9"><span>9</span></label>
+    <label><input type="radio" name="slideoutShelfQty" value="10"><span>10</span></label>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll("input[name='standardShelfQty'], input[name='slideoutShelfQty']", "input[name='lock']").forEach(input => {
+    input.addEventListener("change", updateShelfCost);
+  });
+
+  function getShelfCost() {
+  const stdQty = parseInt(document.querySelector("input[name='standardShelfQty']:checked")?.value || 0);
+  const slideQty = parseInt(document.querySelector("input[name='slideoutShelfQty']:checked")?.value || 0);
+  const lockValue = document.querySelector("input[name='lock']:checked")?.value || "none";
+  const lockCost = lockPrices[lockValue] || 0;
+
+  const total = stdQty * 121 + slideQty * 198 + lockCost;
+  return total;
+}
+
+
+  function updateShelfCost() {
+    const total = getShelfCost();
+    const output = document.getElementById("quote-output");
+    if (output) {
+      output.innerText = `Total: $${total.toFixed(2)}`;
+    }
+  }
+  
+</script>
+
+
+<!-- Drawer Type -->
+<div class="mb-3">
+  <label class="form-label">Drawer Type</label><br>
+  <div class="circle-options">
+    <label><input type="radio" name="drawerType" value="none" checked><span>None</span></label>
+    <label><input type="radio" name="drawerType" value="full"><span>Full Width</span></label>
+    <label><input type="radio" name="drawerType" value="half"><span>Half Width</span></label>
+  </div>
+</div>
+
+<!-- Full Width Drawer Quantity (1-10) -->
+<div id="full-drawer-qty" class="mb-3" style="display: none;">
+  <label class="form-label">How many full-width drawers?</label>
+  <div class="circle-options">
+    <!-- JS will insert 1–10 radio buttons -->
+  </div>
+</div>
+
+<!-- Half Width Drawer Quantity (2-10, even only) -->
+<div id="half-drawer-qty" class="mb-3" style="display: none;">
+  <label class="form-label">How many half-width drawers?</label>
+  <div class="circle-options">
+    <!-- JS will insert 2,4,6,8,10 radio buttons -->
+  </div>
+</div>
+
+<!-- Drawer Height Dropdowns -->
+<div id="full-drawer-height-selectors" class="mb-3" style="display: none;"></div>
+<div id="half-drawer-height-selectors" class="mb-3" style="display: none;"></div>
+
+
+
+<div id="drawer-height-remaining" class="height-remaining-message"></div>
+
+<!-- Legs and Casters-->
+ <div class="mb-3">
+  <label class="form-label">Legs and Casters</label><br>
+<div class="circle-options">
+  <label class="circle-button">
+    <input type="radio" name="legOption" value="none"><span>None</span>
+  </label>
+  <label class="circle-button">
+    <input type="radio" name="legOption" value="legs"><span>Legs</span>
+  </label>
+  <label class="circle-button">
+    <input type="radio" name="legOption" value="casters" id="casterOption"><span>Casters</span>
+  </label>
+</div>
+
+
+</div> <!-- END of config-sections -->
+
+
+      <!-- Preview Image -->
+      <div id="config-preview" class="text-center mt-4">
+        <img id="preview-image" src="" alt="Locker preview" style="max-width: 300px; display: none;" />
+      </div>
+
+      <!-- Quote Output -->
+      <div id="quote-output" class="alert alert-info mt-4">Total: $0.00</div>
+    </div>
+  </div>
+
+<div id="drawer-price-output" style="margin-top: 10px; font-weight: bold; color: #444;"></div>
+
+  <!-- Main Logic Scripts -->
+  <script src="js/model.js"></script>
+  <script src="js/view.js"></script>
+  <script src="js/controller.js"></script>
+
+  <script>
+    document.querySelectorAll("input[name='standardShelfQty'], input[name='slideoutShelfQty']").forEach(input => {
+      input.addEventListener("change", updateShelfCost);
+    });
+  </script>
+
+<button id="generateQuoteBtn">Generate Quote Now</button>
+<div id="quoteNumberDisplay"></div>
+
+</body>
+</html>
