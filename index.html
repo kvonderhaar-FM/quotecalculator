@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quote Builder</title>
+  <style>
+    .circle-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 10px 0;
+    }
+#copyDescriptionBtn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+    .circle-options label {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      user-select: none;
+      text-align: center;
+      padding: 4px;
+    }
+
+    .circle-options label:hover {
+      border-color: #007bff;
+      background-color: #e6f0ff;
+    }
+
+    .circle-options input[type="radio"],
+    .circle-options input[type="number"] {
+      display: none;
+    }
+
+    .circle-options input[type="radio"]:checked + span {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .color-picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .color-picker input[type="radio"] {
+      display: none;
+    }
+
+    .color-option {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #000;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .color-option:hover {
+      box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.4);
+      border-color: #007bff;
+    }
+
+    .color-picker input[type="radio"]:checked + label.color-option {
+      outline: 3px solid #007bff;
+      box-shadow: 0 0 0 3px white;
+      border-color: #007bff;
+    }
+
+    .section-label {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .warning-banner {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      padding: 10px 16px;
+      margin-top: 12px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <form id="quote-form">
+    <h2>Dimensions</h2>
+    <div class="section-label">Height</div>
+    <div class="circle-options">
+      <label><input type="radio" name="height" value="60"><span>60"</span></label>
+      <label><input type="radio" name="height" value="72" checked /><span>72"</span></label>
+
+    </div>
+
+    <div class="section-label">Width</div>
+    <div class="circle-options">
+      <label><input type="radio" name="width" value="36" checked /><span>36"</span></label>
+      <label><input type="radio" name="width" value="48" /><span>48"</span></label>
+      <label><input type="radio" name="width" value="60" /><span>60"</span></label>
+      <label><input type="radio" name="width" value="72" /><span>72"</span></label>
+    </div>
+
+    <div class="section-label">Depth</div>
+    <div class="circle-options">
+      <label><input type="radio" name="depth" value="24" checked /><span>24"</span></label>
+      <label><input type="radio" name="depth" value="30" /><span>30"</span></label>
+      <label><input type="radio" name="depth" value="36" /><span>36"</span></label>
+    </div>
+
+<div class="section-label">Gauge</div>
+<div class="circle-options">
+  <label>
+    <input type="radio" name="gauge" value="12" checked />
+    <span>12</span>
+  </label>
+  <label>
+    <input type="radio" name="gauge" value="14" />
+    <span>14</span>
+  </label>
+</div>
+<h2>Door Style</h2>
+<div class="circle-options">
+  <label>
+    <input type="radio" name="door" value="Solid" checked />
+    <span>Solid</span>
+  </label>
+  <label>
+    <input type="radio" name="door" value="Clearview" />
+    <span>Clearview</span>
+  </label>
+  <label>
+    <input type="radio" name="door" value="Diamond" />
+    <span>Diamond</span>
+  </label>
+  <label>
+    <input type="radio" name="door" value="Hex" />
+    <span>Hex</span>
+  </label>
+  <label>
+    <input type="radio" name="door" value="Bins" />
+    <span>Bins</span>
+  </label>
+  <label>
+    <input type="radio" name="door" value="Peg" />
+    <span>Peg</span>
+  </label>
+</div>
+<h2>Lock Type</h2>
+<div class="circle-options">
+
+      <label title="None"><input type="radio" name="lock" value="none" checked /><span>None</span></label>
+      <label title="Keyless Lock - Lockey 2200"><input type="radio" name="lock" value="Keyless" /><span>Keyless</span></label>
+      <label title="E-Lock - CompX Regulator"><input type="radio" name="lock" value="Regulator" /><span>Regulator</span></label>
+      <label title="E-Lock w/Audit Tracking - SecuRam L22"><input type="radio" name="lock" value="Audit" /><span>Audit</span></label>
+      <label title="E-Lock Low Profile - CompX OEM series"><input type="radio" name="lock" value="LowProfile" /><span>Low</span></label>
+      <label title="E-Lock Keypad & Prox - CompX 150 series"><input type="radio" name="lock" value="Prox" /><span>Prox</span></label>
+      <label title="E-Lock Network Only - CompX 300 series"><input type="radio" name="lock" value="NetworkOnly" /><span>Net Only</span></label>
+      <label title="E-Lock Net+WiFi+Support - CompX 300 series"><input type="radio" name="lock" value="NetworkSupport" /><span>Net+Supp</span></label>
+      <label title="E-Lock Basic - SecuRam Basic"><input type="radio" name="lock" value="Basic" /><span>Basic</span></label>
+      <label title="E-Lock Fingerprint - SecuRam ScanLogic"><input type="radio" name="lock" value="Fingerprint" /><span>FP</span></label>
+      <label title="E-Lock w/ BT+FP+Hub - SecuRam Smart"><input type="radio" name="lock" value="SmartHub" /><span>BT+Hub</span></label>
+      <label title="E-Lock w/ BT+FP No Hub - SecuRam Smart"><input type="radio" name="lock" value="Smart" /><span>BT</span></label>
+    </div>
+</div>
+
+<h2>Colors</h2>
+    <div class="color-picker" id="color-picker">
+    <div class="color-picker">
+      <input type="radio" id="color-dustygray" name="color" value="DustyGray"checked>
+      <label for="color-dustygray" class="color-option" title="Dusty Gray (RAL 7037)" style="background-color:#757575"></label>
+      <input type="radio" id="color-darkgray" name="color" value="DarkGray">
+      <label for="color-darkgray" class="color-option" title="Dark Gray (RAL 7024)" style="background-color:#5c5d5e"></label>
+      <input type="radio" id="color-beige" name="color" value="Beige">
+      <label for="color-beige" class="color-option" title="Beige (RAL 1019)" style="background-color:#CCC19A"></label>
+      <input type="radio" id="color-yellow" name="color" value="Yellow">
+      <label for="color-yellow" class="color-option" title="Yellow (RAL 1021)" style="background-color:#FFD500"></label>
+      <input type="radio" id="color-orange" name="color" value="Orange">
+      <label for="color-orange" class="color-option" title="Orange (RAL 2009)" style="background-color:#FF7518"></label>
+      <input type="radio" id="color-red" name="color" value="Red">
+      <label for="color-red" class="color-option" title="Red (RAL 3001)" style="background-color:#C1121F"></label>
+      <input type="radio" id="color-blue" name="color" value="Blue">
+      <label for="color-blue" class="color-option" title="Blue (RAL 5001)" style="background-color:#1F3C88"></label>
+      <input type="radio" id="color-lightblue" name="color" value="LightBlue">
+      <label for="color-lightblue" class="color-option" title="Light Blue (RAL 5012)" style="background-color:#ADD8E6"></label>
+      <input type="radio" id="color-teal" name="color" value="Teal">
+      <label for="color-teal" class="color-option" title="Teal (RAL 5021)" style="background-color:#2CA6A4"></label>
+      <input type="radio" id="color-brown" name="color" value="Brown">
+      <label for="color-brown" class="color-option" title="Brown (RAL 8008)" style="background-color:#A97449"></label>
+      <input type="radio" id="color-white" name="color" value="White">
+      <label for="color-white" class="color-option" title="White (RAL 9003)" style="background-color:#FFFFFF"></label>
+      <input type="radio" id="color-black" name="color" value="Black">
+      <label for="color-black" class="color-option" title="Black (RAL 9005)" style="background-color:#000000"></label>
+    </div>
+    </div>
+
+    <h2>Shelves</h2>
+    <div class="section-label">Standard</div>
+    <div class="circle-options">
+      <label><input type="radio" name="standardShelfQty" value="0" checked /><span>0</span></label>
+      <label><input type="radio" name="standardShelfQty" value="1" /><span>1</span></label>
+      <label><input type="radio" name="standardShelfQty" value="2" /><span>2</span></label>
+      <label><input type="radio" name="standardShelfQty" value="3" /><span>3</span></label>
+      <label><input type="radio" name="standardShelfQty" value="4" /><span>4</span></label>
+      <label><input type="radio" name="standardShelfQty" value="5" /><span>5</span></label>
+      <label><input type="radio" name="standardShelfQty" value="6" /><span>6</span></label>
+      <label><input type="radio" name="standardShelfQty" value="7" /><span>7</span></label>
+      <label><input type="radio" name="standardShelfQty" value="8" /><span>8</span></label>
+      <label><input type="radio" name="standardShelfQty" value="9" /><span>9</span></label>
+      <label><input type="radio" name="standardShelfQty" value="10" /><span>10</span></label>
+    </div>
+
+    <div class="section-label">Slide-Out</div>
+    <div class="circle-options">
+      <label><input type="radio" name="slideoutShelfQty" value="0" checked /><span>0</span></label>
+      <label><input type="radio" name="slideoutShelfQty" value="1" /><span>1</span></label>
+      <label><input type="radio" name="slideoutShelfQty" value="2" /><span>2</span></label>
+      <label><input type="radio" name="slideoutShelfQty" value="3" /><span>3</span></label>
+      <label><input type="radio" name="slideoutShelfQty" value="4" /><span>4</span></label>
+      <label><input type="radio" name="slideoutShelfQty" value="5" /><span>5</span></label>
+      <label><input type="radio" name="slideoutShelfQty" value="6" /><span>6</span></label>
+      <label><input type="radio" name="slideoutShelfQty" value="7" /><span>7</span></label>
+      <label><input type="radio" name="slideoutShelfQty" value="8" /><span>8</span></label>
+      <label><input type="radio" name="slideoutShelfQty" value="9" /><span>9</span></label>
+      <label><input type="radio" name="slideoutShelfQty" value="10" /><span>10</span></label>
+    </div>
+
+<div class="section-label">Drawers</div>
+<div class="circle-options">
+  <label><input type="radio" name="drawerType" value="none" checked /><span>None</span></label>
+  <label><input type="radio" name="drawerType" value="full" /><span>Full</span></label>
+  <label><input type="radio" name="drawerType" value="half" /><span>Half</span></label>
+</div>
+
+<div id="full-drawer-qty" class="option-bubbles" style="display: none;">
+  <div class="section-label">Full Width Quantity</div>
+  <div class="circle-options" id="full-qty-options"></div>
+  <div class="drawer-height-selectors" id="full-drawer-height-selectors"></div>
+</div>
+
+<div id="half-drawer-qty" class="option-bubbles" style="display: none;">
+  <div class="section-label">Half Width Quantity</div>
+  <div class="circle-options" id="half-qty-options"></div>
+  <div class="drawer-height-selectors" id="half-drawer-height-selectors"></div>
+</div>
+
+<style>
+  .drawer-height-selectors {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .drawer-height-selectors select {
+    padding: 12px;
+    font-size: 1.1rem;
+    width: 180px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const drawerTypeInputs = document.querySelectorAll('input[name="drawerType"]');
+    const fullDrawerQtyDiv = document.getElementById('full-drawer-qty');
+    const halfDrawerQtyDiv = document.getElementById('half-drawer-qty');
+    const fullQtyOptions = document.getElementById('full-qty-options');
+    const halfQtyOptions = document.getElementById('half-qty-options');
+    const fullHeightSelectors = document.getElementById('full-drawer-height-selectors');
+    const halfHeightSelectors = document.getElementById('half-drawer-height-selectors');
+
+    function createHeightDropdown(index) {
+      const select = document.createElement('select');
+      select.name = `drawerHeight_${index}`;
+      [3, 4, 5, 6].forEach(height => {
+        const option = document.createElement('option');
+        option.value = height;
+        option.textContent = `${height}"`;
+        select.appendChild(option);
+      });
+      return select;
+    }
+
+    function populateDrawerQuantities() {
+      fullQtyOptions.innerHTML = '';
+      halfQtyOptions.innerHTML = '';
+      fullHeightSelectors.innerHTML = '';
+      halfHeightSelectors.innerHTML = '';
+
+      for (let i = 1; i <= 10; i++) {
+        const fullLabel = document.createElement('label');
+        fullLabel.innerHTML = `<input type="radio" name="fullDrawerQty" value="${i}"><span>${i}</span>`;
+        fullQtyOptions.appendChild(fullLabel);
+      }
+
+      for (let i = 2; i <= 10; i += 2) {
+        const halfLabel = document.createElement('label');
+        halfLabel.innerHTML = `<input type="radio" name="halfDrawerQty" value="${i}"><span>${i}</span>`;
+        halfQtyOptions.appendChild(halfLabel);
+      }
+    }
+
+    drawerTypeInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        fullHeightSelectors.innerHTML = '';
+        halfHeightSelectors.innerHTML = '';
+
+        if (input.value === 'full') {
+          fullDrawerQtyDiv.style.display = 'block';
+          halfDrawerQtyDiv.style.display = 'none';
+          populateDrawerQuantities();
+        } else if (input.value === 'half') {
+          halfDrawerQtyDiv.style.display = 'block';
+          fullDrawerQtyDiv.style.display = 'none';
+          populateDrawerQuantities();
+        } else {
+          fullDrawerQtyDiv.style.display = 'none';
+          halfDrawerQtyDiv.style.display = 'none';
+        }
+      });
+    });
+
+    document.addEventListener('change', (e) => {
+      if (e.target.name === 'fullDrawerQty') {
+        fullHeightSelectors.innerHTML = '';
+        const qty = parseInt(e.target.value);
+        for (let i = 1; i <= qty; i++) {
+          const wrapper = document.createElement('div');
+          wrapper.textContent = `Drawer ${i} Height: `;
+          wrapper.appendChild(createHeightDropdown(i));
+          fullHeightSelectors.appendChild(wrapper);
+        }
+      }
+
+      if (e.target.name === 'halfDrawerQty') {
+        halfHeightSelectors.innerHTML = '';
+        const qty = parseInt(e.target.value);
+        for (let i = 1; i <= qty / 2; i++) {
+          const wrapper = document.createElement('div');
+          wrapper.textContent = `Drawers ${2*i-1} & ${2*i} Height: `;
+          wrapper.appendChild(createHeightDropdown(i));
+          halfHeightSelectors.appendChild(wrapper);
+        }
+      }
+    });
+  });
+  </script>
+
+<div style="margin-top: 20px; font-size: 1.4rem;">
+  Total Price: <span id="finalPrice">$0.00</span>
+  <p><strong>SKU:</strong> <span id="skuDisplay"></span></p>
+<div style="margin-top: 20px;">
+  <p><strong>Description:</strong></p>
+  <textarea id="descriptionText" rows="4" style="width: 100%; font-size: 1rem;" readonly></textarea>
+
+<button type="button" id="copyDescriptionBtn" style="padding: 8px 16px; font-size: 1rem; background-color: #ff0000;">Copy Description</button>
+<button type="button" id="copyDimensionsBtn" style="padding: 8px 16px; font-size: 1rem;background-color: #ff0000;">Copy Dimensions</button>
+
+
+</div>
+
+</div>
+</div>
+</form>
+<!-- CSS -->
+<link rel="stylesheet" href="./css/styles.css">
+
+<!-- JavaScript -->
+<script src="./js/model.js"></script>
+<script src="./js/controller.js"></script>
+<script src="./js/description.js"></script>
+</body>
+</html>
