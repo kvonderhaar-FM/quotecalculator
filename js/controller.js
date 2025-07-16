@@ -1,9 +1,36 @@
-// controller.js
-console.log("controller.js loaded");
+let currentHeight = 72;
+let FULL_WIDTH_PRICES = {};
+let HALF_WIDTH_PRICES = {};
+let LOCK_PRICES = {};
 
-const FULL_WIDTH_PRICES = window.drawerPrices.full;
-const HALF_WIDTH_PRICES = window.drawerPrices.half;
-const LOCK_PRICES = window.lockPrices;
+document.addEventListener("DOMContentLoaded", () => {
+  // Now drawerPrices will be defined
+  FULL_WIDTH_PRICES = window.drawerPricesByHeight?.[window.currentHeight]?.full || {};
+  HALF_WIDTH_PRICES = window.drawerPricesByHeight?.[window.currentHeight]?.half || {};
+  LOCK_PRICES = window.lockPrices || {};
+
+  attachPriceListeners();
+  updateTotalPrice();
+
+  const copyBtn = document.getElementById("copyDescriptionBtn");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", () => {
+      const description = document.getElementById("descriptionText")?.value.trim();
+      if (!description) return;
+
+      navigator.clipboard.writeText(description)
+        .then(() => {
+          copyBtn.textContent = "Copied!";
+          setTimeout(() => copyBtn.textContent = "Copy Description", 2000);
+        })
+        .catch(err => {
+          console.error("Clipboard copy failed:", err);
+          alert("Failed to copy description.");
+        });
+    });
+  }
+});
+
 
 function getTotalShelfCount() {
   const standard = parseInt(getSelectedValue("standardShelfQty") || "0");
@@ -21,6 +48,30 @@ let shelfText = totalShelves > 0
 
   return standardQty + slideQty;
 }
+function createQuantityBubbles(containerId, quantityOptions) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = ""; // Clear old ones
+
+  quantityOptions.forEach((qty) => {
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    const span = document.createElement("span");
+
+    input.type = "radio";
+    input.name = "drawerQuantity"; // ✅ Must be exactly this
+    input.value = qty;
+
+    span.textContent = qty;
+
+    label.appendChild(input);
+    label.appendChild(span);
+    container.appendChild(label);
+  });
+}
+
+
 
 function getTotalDrawerCount() {
   const fullQty = parseInt(getSelectedValue("fullDrawerQty") || "0");
@@ -47,50 +98,95 @@ function getHalfDrawerHeights() {
 function calculateBaseCabinetPrice() {
   const depth = parseInt(getSelectedValue("depth"));
   const width = parseInt(getSelectedValue("width"));
-  const prices = window.basePrices;
+  const prices = window.basePricesByHeight;
 
-  console.log("Selected depth:", depth);
-  console.log("Selected width:", width);
-  console.log("Available basePrices:", prices);
-  console.log("Lookup result:", prices?.[depth]?.[width]);
-
-  if (!depth || !width || !prices[depth] || !prices[depth][width]) return 0;
-
-  return prices[depth][width];
+  if (!depth || !width || !prices[currentHeight] || !prices[currentHeight][depth]) return 0;
+  return prices[currentHeight][depth][width] || 0;
 }
-
 function calculateDrawerCost() {
-  const drawerType = getSelectedValue('drawerType');
-  if (drawerType === 'none') return 0;
+  const height = window.currentHeight;
+  const depth = parseInt(getSelectedValue("depth"));
+  const width = parseInt(getSelectedValue("width"));
+  const drawerType = getSelectedValue("drawerType");
 
-  if (drawerType === 'full') {
-    const heights = getFullDrawerHeights();
-    return heights.reduce((sum, h) => sum + (FULL_WIDTH_PRICES[h] || 0), 0);
-  }
+  const quantity = drawerType === "full" 
+    ? parseInt(getSelectedValue("fullDrawerQty") || "0") 
+    : drawerType === "half" 
+      ? parseInt(getSelectedValue("halfDrawerQty") || "0") 
+      : 0;
 
-  if (drawerType === 'half') {
-    const heights = getHalfDrawerHeights();
-    return heights.reduce((sum, h) => sum + (HALF_WIDTH_PRICES[h] || 0), 0);
-  }
+  const drawerHeights = drawerType === "full" ? getFullDrawerHeights?.() : getHalfDrawerHeights?.();
+  const typeKey = drawerType?.toLowerCase();
 
-  return 0;
+  if (!quantity || !drawerHeights || !typeKey) return 0;
+
+  const drawerData = window.drawerPricesByHeight?.[height]?.[typeKey]?.[quantity];
+  if (!drawerData) return 0;
+
+  let price = drawerData?.[depth]?.[width] || 0;
+
+  // Optional surcharge for tall drawers
+  const surcharge = drawerHeights.reduce((sum, h) => sum + (h > 3 ? 50 : 0), 0);
+  price += surcharge;
+
+  return price;
 }
 
 function calculateLockCost() {
-  const lock = getSelectedValue('lock');
-  return lock ? LOCK_PRICES[lock] || 0 : 0;
+  const lock = getSelectedValue("lock");
+  const lockPriceMap = {
+    none: 0,
+    Keyless: "Keyless Lock - Lockey 2200",
+    Regulator: "E-Lock - CompX Regulator",
+    Audit: "E-Lock w/Audit Tracking - SecuRam L22 (Prologic series)",
+    LowProfile: "E-Lock Low Profile - CompX OEM series",
+    Prox: "E-Lock Keypad & Prox - CompX 150 series",
+    NetworkOnly: "E-Lock Network + WiFi Lock Only! - CompX 300 series",
+    NetworkSupport: "E-Lock Network+WiFi w/Pro SW & Tech Sup - CompX 300",
+    Basic: "E-Lock Basic - SecuRam (SafeLogic Basic)",
+    Fingerprint: "E-Lock FingerPrint - SecuRam (ScanLogic Basic)",
+    SmartHub: "E-Lock w/ BT/FP, w/ Hub (BT) - SecuRam (ScanLogic Smart)",
+    Smart: "E-Lock w/ BT/FP No Hub (BT) - SecuRam (ScanLogic Smart)"
+  };
+  const lockKey = lockPriceMap[lock] || lock;
+  return window.lockPrices?.[lockKey] || 0;
 }
+function calculateDoorCost() {
+  const door = getSelectedValue("door");
+  const height = window.currentHeight;
+  const depth = parseInt(getSelectedValue("depth"));
+  const width = parseInt(getSelectedValue("width"));
+
+  const doorPriceMap = {
+    Solid: "Solid",
+    Clearview: "Clearview",
+    Diamond: "Diamond Vent",
+    Hex: "Hex Vent",
+    Bins: "Bins on Doors",
+    Peg: "Peg Board"
+  };
+  const doorKey = doorPriceMap[door] || door;
+  const doorData = window.doorPricesByHeight?.[height]?.[doorKey];
+
+  if (!doorData) return 0;
+
+  return doorData?.[depth]?.[width] || 0;
+}
+
 
 function calculateShelfCost() {
-  const standard = parseInt(getSelectedValue("standardShelfQty") || "0");
-  const slide = parseInt(getSelectedValue("slideoutShelfQty") || "0");
+  const standardQty = parseInt(getSelectedValue("standardShelfQty") || "0");
+  const slideQty = parseInt(getSelectedValue("slideoutShelfQty") || "0");
+  const depth = parseInt(getSelectedValue("depth"));
+  const width = parseInt(getSelectedValue("width"));
 
-  const standardQty = isNaN(standard) ? 0 : standard;
-  const slideQty = isNaN(slide) ? 0 : slide;
+  const shelfPrices = window.shelfPricesByHeight?.[currentHeight];
 
-  return (standardQty * 121) + (slideQty * 198);
+  const standardPrice = shelfPrices?.Standard?.[depth]?.[width] || 0;
+  const slidePrice = shelfPrices?.["Slide-Out"]?.[depth]?.[width] || 0;
+
+  return (standardQty * standardPrice) + (slideQty * slidePrice);
 }
-
 
 function calculateColorSurcharge() {
   const color = getSelectedValue('color');
@@ -141,7 +237,10 @@ function generateSKU() {
   if (drawerQty > 0) {
     sku += `-${drawerQty}DB`;
   }
-
+  // Step 7: Add -L if 14 gauge
+  if (gauge === "14") {
+    sku += `-L`;
+  }
   // Step 6: Add color RAL if not DustyGray
   const selectedColorInput = document.querySelector('input[name="color"]:checked');
   if (selectedColorInput?.value !== "DustyGray") {
@@ -150,11 +249,6 @@ function generateSKU() {
     if (match) {
       sku += `-${match[1]}`; // RAL number
     }
-  }
-
-  // Step 7: Add -L if 14 gauge
-  if (gauge === "14") {
-    sku += `-L`;
   }
 
   // Display result
@@ -184,28 +278,51 @@ function generateDescription() {
     if (display) display.value = desc;
     return desc;
 }
-
 function updateTotalPrice() {
   const basePrice = calculateBaseCabinetPrice();
   const drawerCost = calculateDrawerCost();
   const lockCost = calculateLockCost();
   const shelfCost = calculateShelfCost();
   const colorUpcharge = calculateColorSurcharge();
+  const doorCost = calculateDoorCost();
 
-  const total = basePrice + drawerCost + lockCost + shelfCost + colorUpcharge;
+  const total = basePrice + drawerCost + lockCost + shelfCost + colorUpcharge + doorCost;
 
-  const display = document.getElementById('finalPrice');
+  const display = document.getElementById("finalPrice");
   if (display) {
     display.textContent = `$${total.toFixed(2)}`;
   }
 
-  // Debug log
-  console.log(`Breakdown → Base: ${basePrice}, Drawers: ${drawerCost}, Locks: ${lockCost}, Shelves: ${shelfCost}, Color: ${colorUpcharge}`);
+  console.log("💵 Price Breakdown", {
+    basePrice, drawerCost, lockCost, shelfCost, colorUpcharge, doorCost, total
+  });
+
   generateSKU();
   generateDescription();
 }
 
-console.log("basePrices in controller.js:", window.basePrices);
+console.log("basePricesByHeight in controller.js:", window.basePricesByHeight);
+
+document.querySelectorAll('input[name="drawerType"]').forEach(radio => {
+  radio.addEventListener("change", (e) => {
+    const selected = e.target.value;
+
+    if (selected === "full") {
+      document.getElementById("full-drawer-qty").style.display = "block";
+      document.getElementById("half-drawer-qty").style.display = "none";
+      createQuantityBubbles("full-qty-options", [3, 4, 5, 6]);  // or [1–10] if you prefer
+    } else if (selected === "half") {
+      document.getElementById("half-drawer-qty").style.display = "block";
+      document.getElementById("full-drawer-qty").style.display = "none";
+      createQuantityBubbles("half-qty-options", [3, 4, 5, 6]);
+    } else {
+      document.getElementById("full-drawer-qty").style.display = "none";
+      document.getElementById("half-drawer-qty").style.display = "none";
+    }
+
+    updateTotalPrice(); // reflect default if switching drawer types
+  });
+});
 
 function attachPriceListeners() {
   document.addEventListener('change', (e) => {
@@ -231,78 +348,23 @@ function attachPriceListeners() {
   });
 
   // Catch-all backup
+document.addEventListener("change", (e) => {
+  if (e.target.name === "height") {
+    currentHeight = parseInt(e.target.value);
+    updateTotalPrice();
+  }
+});
+
   document.addEventListener('change', (e) => {
     if (e.target.matches("input[type='radio'], select")) {
       updateTotalPrice();
     }
   });
 }
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  attachPriceListeners();
-  updateTotalPrice();
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  attachPriceListeners();
-  updateTotalPrice();
-});
-//temporary console logs to troubleshoot
-function calculateDrawerCost() {
-  const drawerType = getSelectedValue('drawerType');
-  console.log("Selected drawer type:", drawerType);
-  if (drawerType === 'none') return 0;
-
-  if (drawerType === 'full') {
-    const heights = getFullDrawerHeights();
-    console.log("Full drawer heights:", heights);
-    const cost = heights.reduce((sum, h) => {
-      const price = window.drawerPrices.full?.[h]?.[24]?.[36]; // use fixed depth/width for test
-      console.log(`Height ${h} => $${price}`);
-      return sum + (price || 0);
-    }, 0);
-    return cost;
-  }
-
-  if (drawerType === 'half') {
-    const heights = getHalfDrawerHeights();
-    console.log("Half drawer heights:", heights);
-    const cost = heights.reduce((sum, h) => {
-      const price = window.drawerPrices.half?.[h]?.[24]?.[36];
-      console.log(`Height ${h} => $${price}`);
-      return sum + (price || 0);
-    }, 0);
-    return cost;
-  }
-
-  return 0;
-}
-function calculateColorSurcharge() {
-  const color = getSelectedValue('color');
-  console.log("Selected color value:", color);
-  return color === "DustyGray" ? 0 : 346;
-}
-
-//log trial over
-document.addEventListener("DOMContentLoaded", () => {
-  const copyBtn = document.getElementById("copyDescriptionBtn");
-
-  if (copyBtn) {
-    copyBtn.addEventListener("click", () => {
-      const description = document.getElementById("descriptionDisplay")?.textContent.trim();
-      if (!description) return;
-
-      navigator.clipboard.writeText(description)
-        .then(() => {
-          copyBtn.textContent = "Copied!";
-          setTimeout(() => copyBtn.textContent = "Copy Description", 2000);
-        })
-        .catch(err => {
-          console.error("Clipboard copy failed:", err);
-          alert("Failed to copy description.");
-        });
-    });
+document.addEventListener("change", (e) => {
+  if (e.target.name === "drawerQuantity") {
+    console.log("Drawer quantity changed:", e.target.value);
+    updateTotalPrice(); // Or updateTotalPriceDebug
   }
 });
+

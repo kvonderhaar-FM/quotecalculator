@@ -110,7 +110,9 @@
     <h2>Dimensions</h2>
     <div class="section-label">Height</div>
     <div class="circle-options">
+      <label><input type="radio" name="height" value="60"><span>60"</span></label>
       <label><input type="radio" name="height" value="72" checked /><span>72"</span></label>
+
     </div>
 
     <div class="section-label">Width</div>
@@ -166,8 +168,25 @@
     <span>Peg</span>
   </label>
 </div>
+<h2>Lock Type</h2>
+<div class="circle-options">
 
-    <h2>Colors</h2>
+      <label title="None"><input type="radio" name="lock" value="none" checked /><span>None</span></label>
+      <label title="Keyless Lock - Lockey 2200"><input type="radio" name="lock" value="Keyless" /><span>Keyless</span></label>
+      <label title="E-Lock - CompX Regulator"><input type="radio" name="lock" value="Regulator" /><span>Regulator</span></label>
+      <label title="E-Lock w/Audit Tracking - SecuRam L22"><input type="radio" name="lock" value="Audit" /><span>Audit</span></label>
+      <label title="E-Lock Low Profile - CompX OEM series"><input type="radio" name="lock" value="LowProfile" /><span>Low</span></label>
+      <label title="E-Lock Keypad & Prox - CompX 150 series"><input type="radio" name="lock" value="Prox" /><span>Prox</span></label>
+      <label title="E-Lock Network Only - CompX 300 series"><input type="radio" name="lock" value="NetworkOnly" /><span>Net Only</span></label>
+      <label title="E-Lock Net+WiFi+Support - CompX 300 series"><input type="radio" name="lock" value="NetworkSupport" /><span>Net+Supp</span></label>
+      <label title="E-Lock Basic - SecuRam Basic"><input type="radio" name="lock" value="Basic" /><span>Basic</span></label>
+      <label title="E-Lock Fingerprint - SecuRam ScanLogic"><input type="radio" name="lock" value="Fingerprint" /><span>FP</span></label>
+      <label title="E-Lock w/ BT+FP+Hub - SecuRam Smart"><input type="radio" name="lock" value="SmartHub" /><span>BT+Hub</span></label>
+      <label title="E-Lock w/ BT+FP No Hub - SecuRam Smart"><input type="radio" name="lock" value="Smart" /><span>BT</span></label>
+    </div>
+</div>
+
+<h2>Colors</h2>
     <div class="color-picker" id="color-picker">
     <div class="color-picker">
       <input type="radio" id="color-dustygray" name="color" value="DustyGray"checked>
@@ -195,22 +214,6 @@
       <input type="radio" id="color-black" name="color" value="Black">
       <label for="color-black" class="color-option" title="Black (RAL 9005)" style="background-color:#000000"></label>
     </div>
-    </div>
-
-    <h2>Lock Type</h2>
-    <div class="circle-options">
-      <label title="None"><input type="radio" name="lock" value="none" checked /><span>None</span></label>
-      <label title="Keyless Lock - Lockey 2200"><input type="radio" name="lock" value="Keyless" /><span>Keyless</span></label>
-      <label title="E-Lock - CompX Regulator"><input type="radio" name="lock" value="Regulator" /><span>Regulator</span></label>
-      <label title="E-Lock w/Audit Tracking - SecuRam L22"><input type="radio" name="lock" value="Audit" /><span>Audit</span></label>
-      <label title="E-Lock Low Profile - CompX OEM series"><input type="radio" name="lock" value="LowProfile" /><span>Low</span></label>
-      <label title="E-Lock Keypad & Prox - CompX 150 series"><input type="radio" name="lock" value="Prox" /><span>Prox</span></label>
-      <label title="E-Lock Network Only - CompX 300 series"><input type="radio" name="lock" value="NetworkOnly" /><span>Net Only</span></label>
-      <label title="E-Lock Net+WiFi+Support - CompX 300 series"><input type="radio" name="lock" value="NetworkSupport" /><span>Net+Supp</span></label>
-      <label title="E-Lock Basic - SecuRam Basic"><input type="radio" name="lock" value="Basic" /><span>Basic</span></label>
-      <label title="E-Lock Fingerprint - SecuRam ScanLogic"><input type="radio" name="lock" value="Fingerprint" /><span>FP</span></label>
-      <label title="E-Lock w/ BT+FP+Hub - SecuRam Smart"><input type="radio" name="lock" value="SmartHub" /><span>BT+Hub</span></label>
-      <label title="E-Lock w/ BT+FP No Hub - SecuRam Smart"><input type="radio" name="lock" value="Smart" /><span>BT</span></label>
     </div>
 
     <h2>Shelves</h2>
@@ -373,17 +376,16 @@
 <div style="margin-top: 20px;">
   <p><strong>Description:</strong></p>
   <textarea id="descriptionText" rows="4" style="width: 100%; font-size: 1rem;" readonly></textarea>
-  <textarea id="descriptionText"></textarea>
 
-  <button id="copyDescriptionBtn">Copy Description</button>
-</div>
+<button type="button" id="copyDescriptionBtn" style="padding: 8px 16px; font-size: 1rem; background-color: #ff0000;">Copy Description</button>
+<button type="button" id="copyDimensionsBtn" style="padding: 8px 16px; font-size: 1rem;background-color: #ff0000;">Copy Dimensions</button>
 
-</div>
 
 </div>
 
+</div>
+</div>
 </form>
-
 <!-- CSS -->
 <link rel="stylesheet" href="./css/styles.css">
 
@@ -391,7 +393,5 @@
 <script src="./js/model.js"></script>
 <script src="./js/controller.js"></script>
 <script src="./js/description.js"></script>
-
-
 </body>
 </html>
